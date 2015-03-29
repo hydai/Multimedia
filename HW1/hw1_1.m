@@ -1,13 +1,15 @@
-img = imread('BFCatvengers.png');
-src = imread('Catvengers.png');
-img = im2double(img);
-src = im2double(src);
+%% Load data first
+img = im2double(imread('BFCatvengers.png'));
+src = im2double(imread('Catvengers.png'));
 
+%% Demosaice image
 fqi = Demosaicing(img);
+
+%% Find PSNR by own implement
 myPSNR = MyPSNR(src, fqi);
 
-[peaksnr, snr] = psnr(fqi, src);
-fprintf('PSNR = %2.4f, %2.4f\n', peaksnr, myPSNR);
+%% Print result
+fprintf('PSNR = %2.4f\n', myPSNR);
 img = fqi-src;
 s(1) = subplot(1, 3, 1);
 imshow(img);

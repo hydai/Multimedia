@@ -11,7 +11,7 @@ botVertIndex = [ 5 6 7 8 ];
 verts = [ topVerts; botVerts ];
 
 %% Define Colors (Your efforts here)
-vertColors = repmat([1 1 1], [8 1]);
+vertColors = verts;
 
 %% Empty faces list
 faces = [];
@@ -20,11 +20,13 @@ faces = [];
 faces = [ faces ; 1 2 3 ; 1 3 4 ];
 
 %% Side faces (Your efforts here)
+%{六個面，每面兩個三角形%}
 for vertI = 1 : 4
 	faceVert1 = topVertIndex( mod(vertI,4)+1 );
 	faceVert2 = topVertIndex( vertI );
-	faceVert3 = botVertIndex( vertI );
-	faces = [ faces ; faceVert1 faceVert2 faceVert3 ];
+	faceVert3 = botVertIndex( mod(vertI,4)+1 );
+	faceVert4 = botVertIndex( vertI );
+	faces = [ faces ; faceVert1 faceVert3 faceVert2 ; faceVert4 faceVert2 faceVert3];
 end
 
 %% Bottom faces

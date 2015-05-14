@@ -1,5 +1,6 @@
 function hw3
     % hw3.m - 請完整寫出把三首歌都分出來的過程
+    %{
     %% Q1
     %% INIT
     clear all;close all;
@@ -48,15 +49,50 @@ function hw3
     audiowrite('high-pass.wav', out_high, fs);
     
     fprintf('Q1 - End\n');
-    
+    %}
     %% Q2
     fprintf('Q2 - Start\n');
     %% INIT
     %clear all;close all;
     [y, fs] = audioread('AnJing_4bit.wav');
     %% Plot the spectrum and shape of the input wave file
-    
+    subplot(2, 2, 1);
+    fa(y, fs);
+    title('input wave');
+    %% Add random noise (uniform distribution)
+    bits = 8;
+    offset = 2^(bits-1); % 128
+    noise = y+rand(size(y))*0.5;
+    y = floor(y*offset+offset); % -1~1 => -128~128
+    noise = floor(noise*offset+offset); % -1~1 => -128~128
+    subplot(2, 2, 2);
+    fa(noise, fs);
+    title('add random noise');
+    %% Apply the first-order feedback loop for noise shaping.
+    c = 0.9;
+    out = zeros(size(noise));
+    for n = 1:size(noise, 1)
+        if n == 1
+            Ei = zeros(1, 2);
+        else
+            Ei = y(n-1, :)-out(n-1, :);
+        end
+        out(n, :) = floor(noise(n, :) + c*Ei);
+    end
+    out = (out-offset)/offset;
+    subplot(2, 2, 3);
+    fa(out, fs);
+    title('noise shaping');
+    [out_low(:, 1), ~] = myFilter(out(:, 1), fs, 9, 'Hamming', 'low-pass', 500);
+    [out_low(:, 2), ~] = myFilter(out(:, 2), fs, 9, 'Hamming', 'low-pass', 500);
+    out_low = out_low*2;
+    subplot(2, 2, 4);
+    fa(out_low, fs);
+    title('Done');
+    audiowrite('AnJing_8bit.wav', out_low, fs);
     fprintf('Q2 - End\n');
+    %% Plot the spectrum of the filtered signal.
+    
 end
 
 function fa(y1, Fs1)

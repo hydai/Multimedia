@@ -10,16 +10,16 @@ function hw3
     %% Filtering
     N = 501;
     fc = [420, 780];
-    [out_low, filter_low] = myFilter(y, fs, N, 'Hamming', 'low-pass', fc(1));
-    [out_band, filter_band] = myFilter(y, fs, N, 'Hamming', 'band-pass', fc);
-    [out_high, filter_high] = myFilter(y, fs, N, 'Hamming', 'high-pass', fc(2));
+    [out_low, filter_low] = myFilter(y, fs, N, 'Blackman', 'low-pass', fc(1));
+    [out_band, filter_band] = myFilter(y, fs, N, 'Blackman', 'band-pass', fc);
+    [out_high, filter_high] = myFilter(y, fs, N, 'Blackman', 'high-pass', fc(2));
 
     %% Plot
     % Frequency domain
     fvtool(filter_low);
     fvtool(filter_band);
     fvtool(filter_high);
-    
+    figure;
     % Filter
     subplot(1, 3, 1);
     fa(out_low, fs);
@@ -55,6 +55,7 @@ function hw3
     %clear all;close all;
     [y, fs] = audioread('AnJing_4bit.wav');
     %% Plot the spectrum and shape of the input wave file
+    figure;
     subplot(2, 2, 1);
     fa(y, fs);
     title('input wave');

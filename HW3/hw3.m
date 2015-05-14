@@ -63,8 +63,8 @@ function hw3
     bits = 8;
     offset = 2^(bits-1); % 128
     noise = y+rand(size(y))-0.5;
-    y = floor(y*offset+offset); % -1~1 => -128~128
-    noise = floor(noise*offset+offset); % -1~1 => -128~128
+    y = floor(y*offset); % -1~1 => -128~128
+    noise = floor(noise*offset); % -1~1 => -128~128
     subplot(2, 2, 2);
     fa(noise, fs);
     title('add random noise');
@@ -79,7 +79,7 @@ function hw3
         end
         out(n, :) = floor(noise(n, :) + c*Ei);
     end
-    out = (out-offset)/offset;
+    out = out/offset;
     subplot(2, 2, 3);
     fa(out, fs);
     title('noise shaping');

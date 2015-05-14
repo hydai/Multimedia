@@ -1,6 +1,5 @@
 function hw3
     % hw3.m - 請完整寫出把三首歌都分出來的過程
-    %{
     %% Q1
     %% INIT
     clear all;close all;
@@ -49,7 +48,7 @@ function hw3
     audiowrite('high-pass.wav', out_high, fs);
     
     fprintf('Q1 - End\n');
-    %}
+
     %% Q2
     fprintf('Q2 - Start\n');
     %% INIT
@@ -62,7 +61,7 @@ function hw3
     %% Add random noise (uniform distribution)
     bits = 8;
     offset = 2^(bits-1); % 128
-    noise = y+rand(size(y))*0.5;
+    noise = y+rand(size(y))-0.5;
     y = floor(y*offset+offset); % -1~1 => -128~128
     noise = floor(noise*offset+offset); % -1~1 => -128~128
     subplot(2, 2, 2);
@@ -83,24 +82,23 @@ function hw3
     subplot(2, 2, 3);
     fa(out, fs);
     title('noise shaping');
-    [out_low(:, 1), ~] = myFilter(out(:, 1), fs, 9, 'Hamming', 'low-pass', 500);
-    [out_low(:, 2), ~] = myFilter(out(:, 2), fs, 9, 'Hamming', 'low-pass', 500);
-    out_low = out_low*2;
+    out_low = zeros(size(out));
+    [out_low(:, 1), ~] = myFilter(out(:, 1), fs, bits+1, 'Hanning', 'low-pass', 500);
+    [out_low(:, 2), ~] = myFilter(out(:, 2), fs, bits+1, 'Hanning', 'low-pass', 500);
     subplot(2, 2, 4);
     fa(out_low, fs);
     title('Done');
     audiowrite('AnJing_8bit.wav', out_low, fs);
     fprintf('Q2 - End\n');
-    %% Plot the spectrum of the filtered signal.
     
 end
 
-function fa(y1, Fs1)
+function fa(y1, fs1)
     % Frequency analysis - you can use the following code to plot spectrum
-    % y1: signal, Fs1: sampling rate
+    % y1: signal, fs1: sampling rate
 
     L = 2^nextpow2(max(size(y1)));
     y1_FFT = fft(y1,L);
-    xx = Fs1/2*linspace(0,1,L/2+1);
+    xx = fs1/2*linspace(0,1,L/2+1);
     plot(xx,abs(y1_FFT(1:L/2+1)));
 end

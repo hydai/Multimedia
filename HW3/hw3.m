@@ -8,8 +8,8 @@ function hw3
     [y, fs] = audioread('hw3_mix.wav');
 
     %% Filtering
-    N = 601;
-    fc = [400, 800];
+    N = 501;
+    fc = [420, 780];
     [out_low, filter_low] = myFilter(y, fs, N, 'Hamming', 'low-pass', fc(1));
     [out_band, filter_band] = myFilter(y, fs, N, 'Hamming', 'band-pass', fc);
     [out_high, filter_high] = myFilter(y, fs, N, 'Hamming', 'high-pass', fc(2));

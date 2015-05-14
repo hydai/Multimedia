@@ -45,12 +45,13 @@ end
         
 % 3. Create the windowing function
 % 4. Get the realistic filter
+% Not in zero-phase
 if strcmp(wFun,'Hanning') == 1
-    filter = filter.*(0.5+0.5*cos(2*pi*(1:N)/N));
+    filter = filter.*(0.5-0.5*cos(2*pi*(1:N)/N));
 elseif strcmp(wFun, 'Hamming') == 1
-    filter = filter.*(0.54+0.46*cos(2*pi*(1:N)/N));
+    filter = filter.*(0.54-0.46*cos(2*pi*(1:N)/N));
 elseif strcmp(wFun, 'Blackman') == 1
-    filter = filter.*(0.42+0.5*cos(2*pi*(1:N)/(N-1))+0.08*cos(4*pi*(1:N)/N-1));
+    filter = filter.*(0.42-0.5*cos(2*pi*(1:N)/(N-1))+0.08*cos(4*pi*(1:N)/N-1));
 else
     % Unknown Type, do nothing
 end
